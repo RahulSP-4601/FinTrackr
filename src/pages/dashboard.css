@@ -1,0 +1,155 @@
+/* Reset margins and padding */
+body,
+html {
+  margin: 0; /* Remove default body margin */
+  padding: 0; /* Remove default body padding */
+  width: 100%; /* Full width */
+}
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Space items evenly */
+  align-items: center; /* Vertically center items */
+  padding: 10px 20px; /* Adjust padding for top/bottom and left/right */
+  position: fixed; /* Fix navbar at the top */
+  top: 0; /* Position at the top */
+  margin-top: -112px;
+  left: -11.2%; /* Ensure it starts from the left */
+  width: 100vw; /* Use 100vw to ensure full viewport width */
+  background-color: #5f77f0; /* Navbar background color */
+  z-index: 1000; /* Stay above other content */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+
+
+.user-account {
+  position: relative; /* Position for the dropdown */
+}
+
+.user-icon {
+  color: white; /* Color for the icon */
+  cursor: pointer; /* Cursor changes to pointer on hover */
+}
+
+/* Dropdown Styling */
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 10px; /* Padding for spacing */
+  font-family: "Inter", sans-serif;
+  font-weight: 500; /* Adjust weight as needed */
+  font-size: 24px; /* Desired font size */
+  margin-top: 20px;
+  width: 200px; /* Set a width for the dropdown */
+}
+
+/* Dropdown item and button styles */
+.dropdown-content p,
+.dropdown-content button {
+  margin: 10px; /* Spacing for items in dropdown */
+  padding: 8px 12px; /* Padding for items */
+  cursor: pointer; /* Cursor changes to pointer on hover */
+}
+
+/* Logout button styling */
+.dropdown-content button {
+  background-color: #0400ff; /* Blue background for logout button */
+  color: white; /* White text for logout button */
+  border: none; /* Remove border */
+  border-radius: 8px; /* Rounded corners for button */
+  transition: background-color 0.3s; /* Smooth background color transition */
+  width: 150px; /* Fixed width for the button */
+  margin: 20px 17px; /* Center the button horizontally */
+  padding: 10px; /* Add padding for better appearance */
+}
+
+/* Hover effect for logout button */
+.dropdown-content button:hover {
+  background-color: #0400ff; /* Darker blue on hover */
+}
+
+/* Dashboard styling */
+.dashboard {
+  text-align: center;
+  margin-top: 60px; /* Adjust margin to avoid overlap with fixed navbar */
+  padding: 20px; /* Add padding for better spacing */
+}
+
+/* Card Styling for balance, income, expense */
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  display: inline-block;
+  width: calc(30% - 20px); /* Adjust card width to make it more responsive */
+  text-align: center;
+  min-width: 250px; /* Set a minimum width for the cards */
+}
+
+.dashboard-content {
+  display: flex; /* Flexbox layout to arrange items horizontally */
+  justify-content: space-between; /* Space between the items */
+  align-items: flex-start; /* Vertically aligns items */
+  margin-top: 40px; /* Adds spacing between the title and content */
+  flex-wrap: wrap; /* Wrap content when screen is too small */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .dashboard-content {
+    flex-direction: column; /* Stack cards vertically */
+    align-items: center; /* Center align cards */
+  }
+
+  .card {
+    width: 100%; /* Full width for mobile cards */
+    max-width: 400px; /* Max width for mobile cards */
+  }
+}
+
+/* Button styling */
+button {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect for buttons */
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Popup form 3D effect */
+.popup-form {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  transform: perspective(1000px) rotateX(0deg);
+  animation: popUp 0.5s ease-out;
+}
+
+/* Animation for popup form */
+@keyframes popUp {
+  from {
+    transform: perspective(1000px) rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
