@@ -1,0 +1,16 @@
+/* src/components/PieChart.css */
+.pie-chart-box {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 30px;
+    width: 35%;
+    
+  }
+  
+  .pie-chart-box h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+  

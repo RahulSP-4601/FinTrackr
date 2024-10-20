@@ -6,6 +6,8 @@ import './Dashboard.css'; // Add your CSS for styling
 import CurrBalance from './currBalance';
 import TotalIncome from './TotalIncome';
 import TotalExpense from './TotalExpense';
+import FinancialStats from './FinancialStats';
+import PieChart from './PieChart'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
 import { faUser } from '@fortawesome/free-solid-svg-icons'; // Import user icon
 
@@ -52,6 +54,8 @@ const Dashboard = () => {
         <CurrBalance />
         <TotalIncome />
         <TotalExpense />
+        <FinancialStats />
+        <PieChart />
       </div>
     </div>
   );

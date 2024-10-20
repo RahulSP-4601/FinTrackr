@@ -1,51 +1,92 @@
 import React, { useState, useEffect } from "react";
-import { db, auth } from "../firebase"; // Import firestore and auth
-import { doc, onSnapshot, updateDoc } from "firebase/firestore"; // Import onSnapshot for real-time updates
-import { Modal, Button } from 'react-bootstrap';
-const CurrBalance = () => {
-  const [balance, setBalance] = useState(0);
-  const [error, setError] = useState(null); // State to hold any errors
+import { db, auth } from "../firebase"; 
+import { doc, onSnapshot, updateDoc } from "firebase/firestore"; 
+import { Button } from 'react-bootstrap';
 
-  // Listen for real-time updates to the user's document
+const CurrBalance = () => {
+  const [balance, setBalance] = useState(() => {
+    const savedBalance = localStorage.getItem('balance');
+    return savedBalance ? parseInt(savedBalance, 10) : 0;
+  });
+  const [totalIncome, setTotalIncome] = useState(() => {
+    const savedIncome = localStorage.getItem('income');
+    return savedIncome ? parseInt(savedIncome, 10) : 0;
+  });
+  const [totalExpense, setTotalExpense] = useState(() => {
+    const savedExpense = localStorage.getItem('expense');
+    return savedExpense ? parseInt(savedExpense, 10) : 0;
+  });
+  const [error, setError] = useState(null);
+
   useEffect(() => {
+    const fetchBalanceData = () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+
+        const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            const newIncome = data.income || 0;
+            const newExpense = data.expense || 0;
+
+            setTotalIncome(newIncome);
+            setTotalExpense(newExpense);
+
+            const newBalance = newIncome - newExpense;
+            setBalance(newBalance);
+
+            // Save to localStorage
+            localStorage.setItem('balance', newBalance);
+            localStorage.setItem('income', newIncome);
+            localStorage.setItem('expense', newExpense);
+
+            console.log("Balance updated:", newBalance);
+          } else {
+            console.log("User document does not exist.");
+          }
+        }, (err) => {
+          console.error("Error listening to document:", err);
+          setError("Failed to listen for updates. Please try again.");
+        });
+
+        return () => unsubscribe();
+      }
+    };
+    fetchBalanceData();
+  }, []);
+
+  const handleReset = async () => {
     const user = auth.currentUser;
-    
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
-      
-      // Set up the real-time listener
-      const unsubscribe = onSnapshot(userDocRef, (doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          const totalIncome = data.income || 0;
-          const totalExpense = data.expense || 0;
-          const newBalance = totalIncome - totalExpense; // Calculate balance
-          setBalance(newBalance); // Update state with calculated balance
+      try {
+        // Reset income, expense, and balance in Firestore
+        await updateDoc(userDocRef, { income: 0, expense: 0, balance: 0 });
 
-          // Update the balance in Firestore
-          updateDoc(userDocRef, { balance: newBalance }).catch((err) => {
-            console.error("Error updating balance:", err);
-            setError("Failed to update balance. Please try again."); // Set error message
-          });
-        }
-      }, (error) => {
-        console.error("Error listening to document:", error);
-        setError("Failed to listen for updates. Please try again."); // Set error message
-      });
+        // Reset local state and localStorage
+        setBalance(0);
+        setTotalIncome(0);
+        setTotalExpense(0);
+        localStorage.setItem('balance', 0);
+        localStorage.setItem('income', 0);
+        localStorage.setItem('expense', 0);
 
-      // Clean up the listener on unmount
-      return () => unsubscribe();
-    } 
-  }, []);
+        console.log("Balance reset to 0.");
+      } catch (err) {
+        console.error("Error resetting balance:", err);
+        setError("Failed to reset balance. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="card">
       <h2>Current Balance</h2>
-      {error && <p className="error">{error}</p>} {/* Display error if exists */}
+      {error && <p className="text-danger">{error}</p>}
       <p>${balance}</p>
-      <Button onClick={() => setShow(true)}>Reset</Button>
+      <Button variant="danger" onClick={handleReset}>Reset</Button>
     </div>
-    
   );
 };
 
